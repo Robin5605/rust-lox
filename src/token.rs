@@ -10,9 +10,9 @@ pub struct Token {
 impl fmt::Display for Token {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let text: String = match &self.token_type {
-            TokenType::Identifier(identifier) => identifier.to_owned(),
-            TokenType::String(string) => string.to_owned(),
-            TokenType::Float(float) => float.to_string(),
+            TokenType::Identifier(identifier) => format!("Identifier('{}')", identifier),
+            TokenType::String(string) => format!("String('{}')", string),
+            TokenType::Float(float) => format!("Float({})", float),
             token => format!("{:?}", token),
         };
 

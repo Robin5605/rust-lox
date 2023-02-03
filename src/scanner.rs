@@ -82,14 +82,15 @@ impl Scanner {
         num.parse().unwrap()
     }
 
-    fn parse_identifier(&mut self) -> String {
+    fn parse_identifier(&mut self) -> TokenType {
         let mut identifier = String::new();
         while self.peek().is_alphanumeric() && !self.is_at_end() {
             let c = self.advance();
             identifier.push(c);
         };
 
-        identifier
+        get_keyword(&identifier)
+            .unwrap_or(TokenType::Identifier(identifier))
     }
 
     fn scan_token(&mut self) -> Option<Token> {
@@ -176,7 +177,7 @@ impl Scanner {
             }
             '"' => Some(TokenType::String(self.parse_string())),
             '0'..='9' => Some(TokenType::Float(self.parse_number())),
-            'a'..='z' | 'A'..='Z' | '_' => Some(TokenType::Identifier(self.parse_identifier())),
+            'a'..='z' | 'A'..='Z' | '_' => Some(self.parse_identifier()),
             _ => panic!("Unrecognized token: {} on line {}", c, self.line),
         };
 
@@ -229,5 +230,27 @@ impl Scanner {
 impl  Display for Scanner {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(f, "{}", self.tokens.iter().map(|i| format!("{}", i)).collect::<Vec<String>>().join("\n"))
+    }
+}
+
+fn get_keyword(identifier: &String) -> Option<TokenType> {
+    match identifier.as_str() {
+        "and" => Some(TokenType::And),
+        "class" => Some(TokenType::Class),
+        "else" => Some(TokenType::Else),
+        "false" => Some(TokenType::False),
+        "for" => Some(TokenType::For),
+        "fun" => Some(TokenType::Fun),
+        "if" => Some(TokenType::If),
+        "nil" => Some(TokenType::Nil),
+        "or" => Some(TokenType::Or),
+        "print" => Some(TokenType::Print),
+        "return" => Some(TokenType::Return),
+        "super" => Some(TokenType::Super),
+        "this" => Some(TokenType::This),
+        "true" => Some(TokenType::True),
+        "var" => Some(TokenType::Var),
+        "while" => Some(TokenType::While),
+        _ => None,
     }
 }
