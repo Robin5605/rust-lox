@@ -86,7 +86,6 @@ impl Scanner {
         let mut identifier = String::new();
         while self.peek().is_alphanumeric() && !self.is_at_end() {
             let c = self.advance();
-            dbg!(self.current);
             identifier.push(c);
         };
 
