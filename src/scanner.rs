@@ -4,7 +4,7 @@ use crate::{token::Token, token_type::TokenType};
 
 pub struct Scanner {
     source: String,
-    tokens: Vec<Token>,
+    pub tokens: Vec<Token>,
 
     start: usize,
     current: usize,
