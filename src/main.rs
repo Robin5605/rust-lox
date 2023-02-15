@@ -3,10 +3,12 @@ pub mod token;
 pub mod scanner;
 pub mod parser;
 pub mod ast;
+mod interpreter;
 
 use std::{env, io::Error, path::Path};
 
 
+use interpreter::interpret;
 use parser::Parser;
 use rustlox::read_file;
 
@@ -24,17 +26,8 @@ fn main() -> Result<(), Error> {
 
     let mut parser = Parser::from_tokens(scanner.tokens);
     let expr = parser.parse();
-    println!("{expr}");
-
-    // println!("{}", scanner);
-
-    // let expr = Expr::Binary {
-    //     left: Box::new(Expr::Unary { operator: Token::new(TokenType::Minus, 1), right: Box::new(Expr::Literal { value: ast::LiteralKind::Float(123f32) }) }),
-    //     operator: Token::new(TokenType::Star, 1),
-    //     right: Box::new(Expr::Grouping { expr: Box::new(Expr::Literal { value: ast::LiteralKind::String("Hi".into()) }) })
-    // };
-
-    // println!("Expression: {expr}");
+    
+    interpret(&expr);
 
     Ok(())
 }
